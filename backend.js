@@ -18,6 +18,7 @@ app.use(express.json())
 app.use(cors({
   origin: (origin, callback) => {
     const ACCEPTED_ORIGINS = [
+      'https://appfrontend-yme6.onrender.com'
       'http://localhost:3000',
       'http://localhost:8080',
       'https://movies.com',
