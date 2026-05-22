@@ -1,6 +1,6 @@
-const net = require('node:net')
+import net from 'node:net'
 
-function findAvailablePort (desiredPort) {
+export function findAvailablePort (desiredPort) {
   return new Promise((resolve, reject) => {
     const server = net.createServer()
 
@@ -20,5 +20,3 @@ function findAvailablePort (desiredPort) {
     })
   })
 }
-
-module.exports = { findAvailablePort }

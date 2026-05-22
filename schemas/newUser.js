@@ -1,4 +1,4 @@
-const z = require('zod')
+import z from 'zod'
 
 const userSchema = z.object({
     username: z.string({
@@ -17,10 +17,6 @@ const userSchema = z.object({
     age: z.number().int().min(18).max(99)
 })
 
-function validateUserData (input) {
+export function validateUserData (input) {
     return userSchema.safeParse(input)
-}
-
-module.exports = {
-    validateUserData
 }

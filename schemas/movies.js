@@ -1,4 +1,4 @@
-const z = require('zod') // zod ayuda con las validaciones de formato por ejemplo
+import z from 'zod' // zod ayuda con las validaciones de formato por ejemplo
 
 const movieSchema = z.object({
   title: z.string({
@@ -21,15 +21,10 @@ const movieSchema = z.object({
   )
 })
 
-function validateMovie (input) {
+export function validateMovie (input) {
   return movieSchema.safeParse(input)
 }
 
-function validatePartialMovie (input) { // valida con la info q entre, ya sean todos los param o uno
+export function validatePartialMovie (input) { // valida con la info q entre, ya sean todos los param o uno
   return movieSchema.partial().safeParse(input)
-}
-
-module.exports = {
-  validateMovie,
-  validatePartialMovie
 }

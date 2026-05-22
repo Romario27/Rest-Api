@@ -1,19 +1,21 @@
-const express = require('express')
-const jwt = require('jsonwebtoken')
-const crypto = require('node:crypto')
-const cors = require('cors')
-const { findAvailablePort } = require('./free-port.js')
+import express, { json } from 'express'
+import pkg from 'jsonwebtoken';
+const { verify, sign } = pkg;
+//import { verify, sign } from 'jsonwebtoken'
+import { randomUUID } from 'node:crypto'
+import cors from 'cors'
+import { findAvailablePort } from './free-port.js'
 
-const accounts = require('./accounts.json')
-const movies = require('./movies.json')
-const { validateMovie, validatePartialMovie } = require('./schemas/movies')
-const {validateUserData} = require('./schemas/newUser')
+import accounts from './accounts.json' assert {type: 'json'}
+import movies from './movies.json' assert {type: 'json'}
+import { validateMovie, validatePartialMovie } from './schemas/movies.js'
+import { validateUserData } from './schemas/newUser.js'
 const desiredPort = process.env.PORT ?? 3000
 
 const SECRET = 'kungfu_Key'
 
 const app = express()
-app.use(express.json())
+app.use(json())
 //app.use(cors())
 app.use(cors({
   origin: (origin, callback) => {
@@ -52,7 +54,7 @@ function verifyToken(req, res, next) {
   const token = auth.split(' ')[1]
 
   try {
-    const decoded = jwt.verify(token, SECRET)
+    const decoded = verify(token, SECRET)
     req.user = decoded
     next()
   } catch {
@@ -99,7 +101,7 @@ app.post('/movies',verifyToken, (req, res) => {
 
   // en base de datos
   const newMovie = {
-    id: crypto.randomUUID(), // uuid v4
+    id: randomUUID(), // uuid v4
     ...result.data
   }
 
@@ -156,7 +158,7 @@ app.post('/login', (req,res) => {
     return res.status(401).json({error: 'User Invalid. Please try again!!'})
   }
 
-  const token = jwt.sign(
+  const token = sign(
     { id: user.id, username: user.username },
     SECRET,
     { expiresIn: '1h' }
@@ -179,7 +181,7 @@ app.post('/newAcc' , (req,res) =>{
   console.log("No fail")
    // en base de datos
   const newUser = {
-    id: crypto.randomUUID(), // uuid v4
+    id: randomUUID(), // uuid v4
     ...result.data
   }
 
